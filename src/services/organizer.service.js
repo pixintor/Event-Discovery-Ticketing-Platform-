@@ -1,4 +1,5 @@
 import { User } from "../models/index.js";
+import { ROLES } from "../constants/roles.js";
 
 export const createOrganizer = async (data) => {
   const existingUser = await User.findOne({
@@ -13,7 +14,7 @@ export const createOrganizer = async (data) => {
 
   const organizer = await User.create({
     ...data,
-    role: "ORGANIZER",
+    role: ROLES.ORGANIZER,
   });
 
   return organizer;

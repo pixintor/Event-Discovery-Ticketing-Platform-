@@ -11,11 +11,13 @@ import {
   updateOrganizerValidator,
 } from "../validators/organizer.validator.js";
 
+import { ROLES } from "../constants/roles.js";
+
 const router = express.Router();
 
 // Protect all organizer routes
 router.use(authenticate);
-router.use(authorize("ADMIN"));
+router.use(authorize(ROLES.ADMIN));
 
 // Create Organizer
 router.post(
