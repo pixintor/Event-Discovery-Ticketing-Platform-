@@ -323,6 +323,19 @@ FOR CREATING USER
 }
 
 
+FOR CREATING TICKET
+{
+  "eventId": "17245ff1-b244-45f1-b14d-10dee9709727",
+  "name": "Early Bird",
+  "price": 5000,
+  "quantity": 100,
+  "salesStart": "2026-08-05",
+  "salesEnd": "2026-08-20",
+  "maxPerAttendee": 2
+}
+
+
+
 ###### Project Foundation (Completed)
 ✔ Project Structure
 ✔ Express Setup

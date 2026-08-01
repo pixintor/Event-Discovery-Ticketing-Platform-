@@ -1,19 +1,12 @@
 import Joi from "joi";
 
 export const createTicketSchema = Joi.object({
-  eventId: Joi.string()
-    .uuid()
-    .required(),
+  eventId: Joi.string().uuid().required(),
 
   name: Joi.string()
     .trim()
     .min(2)
     .max(100)
-    .required(),
-
-  code: Joi.string()
-    .trim()
-    .uppercase()
     .required(),
 
   description: Joi.string()
@@ -28,8 +21,7 @@ export const createTicketSchema = Joi.object({
     .min(1)
     .required(),
 
-  salesStart: Joi.date()
-    .required(),
+  salesStart: Joi.date().required(),
 
   salesEnd: Joi.date()
     .greater(Joi.ref("salesStart"))
@@ -46,11 +38,7 @@ export const updateTicketSchema = Joi.object({
     .trim()
     .min(2)
     .max(100),
-
-  code: Joi.string()
-    .trim()
-    .uppercase(),
-
+    
   description: Joi.string()
     .allow("", null),
 

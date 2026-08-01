@@ -67,10 +67,177 @@ export const createTicket = async (organizerId, data) => {
 };
 
 
-export const getAllTickets = async () => {};
-export const getTicketById = async () => {};
-export const getTicketsByEvent = async () => {};
-export const updateTicket = async () => {};
-export const deleteTicket = async () => {};
-export const activateTicket = async () => {};
-export const deactivateTicket = async () => {};
+// Get All Tickets
+
+export const getAllTickets = async () => {
+  return await TicketType.findAll({
+    include: [
+      {
+        model: Event,
+        as: "event",
+        attributes: ["id", "title"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
+};
+
+// Get Ticket By ID
+
+export const getTicketById = async (id) => {
+  const ticket = await TicketType.findByPk(id, {
+    include: [
+      {
+        model: Event,
+        as: "event",
+      },
+    ],
+  });
+
+  if (!ticket) {
+    throw new NotFoundError("Ticket not found.");
+  }
+
+  return ticket;
+};
+
+
+// Get Tickets By Event
+
+export const getTicketsByEvent = async (eventId) => {
+  return await TicketType.findAll({
+    where: {
+      eventId,
+      isActive: true,
+    },
+    order: [["price", "ASC"]],
+  });
+};
+
+
+// Update Ticket
+
+export const updateTicket = async (
+  id,
+  organizerId,
+  data
+) => {
+  const ticket = await TicketType.findByPk(id, {
+    include: [
+      {
+        model: Event,
+        as: "event",
+      },
+    ],
+  });
+
+  if (!ticket) {
+    throw new NotFoundError("Ticket not found.");
+  }
+
+  if (ticket.event.organizerId !== organizerId) {
+    throw new ForbiddenError(
+      "You can only update your own tickets."
+    );
+  }
+
+  await ticket.update(data);
+
+  return ticket;
+};
+
+
+// Delete Ticket
+
+export const deleteTicket = async (
+  id,
+  organizerId
+) => {
+  const ticket = await TicketType.findByPk(id, {
+    include: [
+      {
+        model: Event,
+        as: "event",
+      },
+    ],
+  });
+
+  if (!ticket) {
+    throw new NotFoundError("Ticket not found.");
+  }
+
+  if (ticket.event.organizerId !== organizerId) {
+    throw new ForbiddenError(
+      "You can only delete your own tickets."
+    );
+  }
+
+  await ticket.destroy();
+
+  return true;
+};
+
+// Activate Ticket
+
+export const activateTicket = async (
+  id,
+  organizerId
+) => {
+  const ticket = await TicketType.findByPk(id, {
+    include: [
+      {
+        model: Event,
+        as: "event",
+      },
+    ],
+  });
+
+  if (!ticket) {
+    throw new NotFoundError("Ticket not found.");
+  }
+
+  if (ticket.event.organizerId !== organizerId) {
+    throw new ForbiddenError(
+      "You can only activate your own tickets."
+    );
+  }
+
+  await ticket.update({
+    isActive: true,
+  });
+
+  return ticket;
+};
+
+
+// Deactivate Ticket
+
+export const deactivateTicket = async (
+  id,
+  organizerId
+) => {
+  const ticket = await TicketType.findByPk(id, {
+    include: [
+      {
+        model: Event,
+        as: "event",
+      },
+    ],
+  });
+
+  if (!ticket) {
+    throw new NotFoundError("Ticket not found.");
+  }
+
+  if (ticket.event.organizerId !== organizerId) {
+    throw new ForbiddenError(
+      "You can only deactivate your own tickets."
+    );
+  }
+
+  await ticket.update({
+    isActive: false,
+  });
+
+  return ticket;
+};
