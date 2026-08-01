@@ -283,6 +283,27 @@ Organizer Endpoints
 | DELETE | `/api/v1/admin/events/:id`         | Remove event    | ✅ Admin |
 
 
+# Ticket
+
+Public
+
+| Method | Endpoint                          | Description                 |
+| ------ | --------------------------------- | --------------------------- |
+| GET    | `/api/v1/events/:eventId/tickets` | View available ticket types |
+
+
+Organizer
+
+| Method | Endpoint                         | Description        |
+| ------ | -------------------------------- | ------------------ |
+| POST   | `/api/v1/tickets`                | Create ticket type |
+| GET    | `/api/v1/tickets/:id`            | View ticket type   |
+| PUT    | `/api/v1/tickets/:id`            | Update ticket      |
+| DELETE | `/api/v1/tickets/:id`            | Delete ticket      |
+| PATCH  | `/api/v1/tickets/:id/activate`   | Activate ticket    |
+| PATCH  | `/api/v1/tickets/:id/deactivate` | Deactivate ticket  |
+
+
 
 
 seedAdmin
