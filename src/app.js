@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import organizerRoutes from "./routes/organizer.routes.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 import categoryRoutes from "./routes/category.routes.js";
+import eventRoutes from "./routes/event.routes.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/organizers", organizerRoutes);
 app.use("/api/v1/categories", categoryRoutes);
+app.use("/api/v1/events", eventRoutes);
 
 
 // 404

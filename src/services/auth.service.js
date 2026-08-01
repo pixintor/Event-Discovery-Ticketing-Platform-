@@ -9,6 +9,7 @@ import { sendVerificationEmail } from "./email.service.js";
 import ConflictError from "../errors/ConflictError.js";
 import UnauthorizedError from "../errors/UnauthorizedError.js";
 import NotFoundError from "../errors/NotFoundError.js";
+import { hashToken } from "../utils/generateToken.js";
 
 /**
  * ===============================
@@ -37,34 +38,42 @@ export const registerOrganizer = async (data) => {
     .update(verificationToken)
     .digest("hex");
 
-  const user = await User.create({
-    firstName: data.firstName,
-    lastName: data.lastName,
-    email: data.email,
-    phone: data.phone,
-    password: data.password,
+const requireVerification =
+  process.env.REQUIRE_EMAIL_VERIFICATION === "true";
 
-    role: "ORGANIZER",
+const user = await User.create({
+  firstName: data.firstName,
+  lastName: data.lastName,
+  email: data.email,
+  phone: data.phone,
+  password: data.password,
+  role: "ORGANIZER",
 
-    emailVerificationToken: hashedToken,
+  emailVerificationToken: requireVerification
+    ? hashedToken
+    : null,
 
-    emailVerified: false,
+  emailVerified: !requireVerification,
 
-    isActive: false,
-  });
+  isActive: !requireVerification,
+});
+console.log("📧 Sending verification email to:", user.email);
 
-try {
-  await sendVerificationEmail({
-    email: user.email,
-    firstName: user.firstName,
-    token: verificationToken,
-  });
-} catch (error) {
-  console.error(
-    "Verification email failed:",
-    error.message
-  );
+
+if (requireVerification) {
+  try {
+    await sendVerificationEmail({
+      email: user.email,
+      firstName: user.firstName,
+      token: verificationToken,
+    });
+
+  } catch (error) {
+    console.error("Verification email failed:", error.message);
+        console.error(error);
+  }
 }
+
   return {
     user,
   };
@@ -123,4 +132,32 @@ const user = await User.scope("withPassword").findOne({
       role: user.role,
     },
   };
+};
+
+
+
+// Email Verification
+
+export const verifyEmail = async (token) => {
+  const hashedToken = hashToken(token);
+
+  const user = await User.findOne({
+    where: {
+      emailVerificationToken: hashedToken,
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundError(
+      "Invalid or expired verification link."
+    );
+  }
+
+  user.emailVerified = true;
+  user.isActive = true;
+  user.emailVerificationToken = null;
+
+  await user.save();
+
+  return user;
 };

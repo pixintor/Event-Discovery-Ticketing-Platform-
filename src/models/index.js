@@ -3,7 +3,7 @@ import sequelize from "../config/database.js";
 import User from "./User.js";
 import Event from "./Event.js";
 import Registration from "./registration.js";
-import Category from "./Category.js";
+import Category from "./category.js";
 
 /*
 |--------------------------------------------------------------------------

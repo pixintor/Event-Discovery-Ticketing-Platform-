@@ -148,6 +148,8 @@ npm install dayjs
 
 npm install morgan
 
+npm install slugify
+npm install joi
 npm install express-rate-limit
 
 
@@ -223,19 +225,67 @@ Send Email Confirmation
 
 
 
-###### Current API Summary
+###### 📚 API Documentation (Current Version)
+
+Authentication (User)
+| Method | Endpoint                                   | Description                | Auth |
+| ------ | ------------------------------------------ | -------------------------- | ---- |
+| POST   | `/api/v1/auth/register`                    | Register a new organizer   | ❌    |
+| POST   | `/api/v1/auth/login`                       | Login user                 | ❌    |
+| POST   | `/api/v1/auth/logout` *(planned)*          | Logout current user        | ✅    |
+| GET    | `/api/v1/auth/profile` *(planned)*         | Get logged-in user profile | ✅    |
+| PUT    | `/api/v1/auth/profile` *(planned)*         | Update profile             | ✅    |
+| POST   | `/api/v1/auth/verify-email` *(planned)*    | Verify email address       | ❌    |
+| POST   | `/api/v1/auth/forgot-password` *(planned)* | Request password reset     | ❌    |
+| POST   | `/api/v1/auth/reset-password` *(planned)*  | Reset password             | ❌    |
+
+
+# 📂 Categories
+
+| Method | Endpoint                 | Description        | Auth    |
+| ------ | ------------------------ | ------------------ | ------- |
+| POST   | `/api/v1/categories`     | Create category    | ✅ Admin |
+| GET    | `/api/v1/categories`     | Get all categories | ❌       |
+| GET    | `/api/v1/categories/:id` | Get category by ID | ❌       |
+| PUT    | `/api/v1/categories/:id` | Update category    | ✅ Admin |
+| DELETE | `/api/v1/categories/:id` | Delete category    | ✅ Admin |
 
 
 
-| Method | Endpoint                        | Description                   | Access |
-| ------ | ------------------------------- | ----------------------------- | ------ |
-| POST   | `/api/v1/auth/login`            | Login                         | Public |
-| POST   | `/api/v1/organizers`            | Create Organizer              | Admin  |
-| GET    | `/api/v1/organizers`            | Get All Organizers            | Admin  |
-| GET    | `/api/v1/organizers/:id`        | Get Organizer                 | Admin  |
-| PUT    | `/api/v1/organizers/:id`        | Update Organizer              | Admin  |
-| PATCH  | `/api/v1/organizers/:id/status` | Activate/Deactivate Organizer | Admin  |
+# 🎉 Events
+Public Endpoints
 
+| Method | Endpoint             | Description                 | Auth |
+| ------ | -------------------- | --------------------------- | ---- |
+| GET    | `/api/v1/events`     | Browse all published events | ❌    |
+| GET    | `/api/v1/events/:id` | Get event details           | ❌    |
+
+
+Organizer Endpoints
+
+| Method | Endpoint                       | Description             | Auth        |
+| ------ | ------------------------------ | ----------------------- | ----------- |
+| GET    | `/api/v1/events/my-events`     | View organizer's events | ✅ Organizer |
+| POST   | `/api/v1/events`               | Create event            | ✅ Organizer |
+| PUT    | `/api/v1/events/:id`           | Update event            | ✅ Organizer |
+| DELETE | `/api/v1/events/:id`           | Delete event            | ✅ Organizer |
+| PATCH  | `/api/v1/events/:id/publish`   | Publish event           | ✅ Organizer |
+| PATCH  | `/api/v1/events/:id/unpublish` | Unpublish event         | ✅ Organizer |
+
+
+# 👨‍💼 Admin (Planned)
+
+| Method | Endpoint                           | Description     | Auth    |
+| ------ | ---------------------------------- | --------------- | ------- |
+| GET    | `/api/v1/admin/events`             | View all events | ✅ Admin |
+| PATCH  | `/api/v1/admin/events/:id/approve` | Approve event   | ✅ Admin |
+| PATCH  | `/api/v1/admin/events/:id/cancel`  | Cancel event    | ✅ Admin |
+| DELETE | `/api/v1/admin/events/:id`         | Remove event    | ✅ Admin |
+
+
+
+
+seedAdmin
 
 {
     "email":"admin@example.com",
