@@ -1,4 +1,5 @@
 import { User } from "../models/index.js";
+import { ROLES } from "../constants/roles.js";
 
 export const createOrganizer = async (data) => {
   const existingUser = await User.findOne({
@@ -8,12 +9,12 @@ export const createOrganizer = async (data) => {
   });
 
   if (existingUser) {
-    throw new Error("Email already exists");
+     throw new ConflictError("Email already exists");
   }
 
   const organizer = await User.create({
     ...data,
-    role: "ORGANIZER",
+    role: ROLES.ORGANIZER,
   });
 
   return organizer;

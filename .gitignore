@@ -1,2 +1,25 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
+
+# Uploaded files
+src/uploads/
+src/uploads/qrcodes/
+src/uploads/banners/
+
+# Logs
+logs/
+*.log
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp

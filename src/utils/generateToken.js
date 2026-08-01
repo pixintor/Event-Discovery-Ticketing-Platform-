@@ -1,9 +1,36 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
-const generateToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+/**
+ * Generate JWT Access Token
+ */
+export const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    }
+  );
 };
 
-export default generateToken;
+/**
+ * Generate Random Token
+ * Used for:
+ * - Email Verification
+ * - Password Reset
+ */
+export const generateRandomToken = () => {
+  return crypto.randomBytes(32).toString("hex");
+};
+
+/**
+ * Hash Token
+ * Store hashed tokens in the database
+ */
+export const hashToken = (token) => {
+  return crypto.createHash("sha256").update(token).digest("hex");
+};

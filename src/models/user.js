@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import bcrypt from "bcryptjs";
 import sequelize from "../config/database.js";
+import { ROLES } from "../constants/roles.js";
 
 const User = sequelize.define(
   "User",
@@ -14,20 +15,42 @@ const User = sequelize.define(
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "First name is required",
+        },
+      },
     },
 
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Last name is required",
+        },
+      },
     },
 
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
+      unique: {
+        msg: "Email already exists",
       },
+      validate: {
+        isEmail: {
+          msg: "Please provide a valid email address",
+        },
+        notEmpty: {
+          msg: "Email is required",
+        },
+      },
+    },
+
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
 
     password: {
@@ -36,25 +59,80 @@ const User = sequelize.define(
     },
 
     role: {
-      type: DataTypes.ENUM("ADMIN", "ORGANIZER"),
-      defaultValue: "ORGANIZER",
+      type: DataTypes.ENUM(...Object.values(ROLES)),
+      allowNull: false,
+      defaultValue: ROLES.ORGANIZER,
     },
 
     isActive: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
+    },
+
+    emailVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    emailVerificationToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    passwordResetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    passwordResetExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+
+    lastLogin: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {
     tableName: "users",
 
+    timestamps: true,
+
+    defaultScope: {
+      withPassword:{
+      attributes: {
+        exclude: [
+          "password",
+          "emailVerificationToken",
+          "passwordResetToken",
+          "passwordResetExpires",
+        ],
+      },
+    },
+  },
+
+    scopes: {
+      withPassword: {
+        attributes: {},
+      },
+    },
+
     hooks: {
-      beforeCreate: async (user) => {
+      async beforeCreate(user) {
+        if (user.email) {
+          user.email = user.email.toLowerCase().trim();
+        }
+
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
       },
 
-      beforeUpdate: async (user) => {
+      async beforeUpdate(user) {
+        if (user.changed("email")) {
+          user.email = user.email.toLowerCase().trim();
+        }
+
         if (user.changed("password")) {
           const salt = await bcrypt.genSalt(10);
           user.password = await bcrypt.hash(user.password, salt);
@@ -64,8 +142,25 @@ const User = sequelize.define(
   }
 );
 
+/**
+ * Compare password
+ */
 User.prototype.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+/**
+ * Return safe user object
+ */
+User.prototype.toJSON = function () {
+  const values = { ...this.get() };
+
+  delete values.password;
+  delete values.emailVerificationToken;
+  delete values.passwordResetToken;
+  delete values.passwordResetExpires;
+
+  return values;
 };
 
 export default User;
