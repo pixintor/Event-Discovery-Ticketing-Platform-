@@ -5,6 +5,8 @@ import morgan from "morgan";
 
 import authRoutes from "./routes/auth.routes.js";
 import organizerRoutes from "./routes/organizer.routes.js";
+import errorMiddleware from "./middleware/error.middleware.js";
+import categoryRoutes from "./routes/category.routes.js";
 
 const app = express();
 
@@ -26,13 +28,18 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/organizers", organizerRoutes);
+app.use("/api/v1/categories", categoryRoutes);
 
-// 404 Route Handler
+
+// 404
 app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: "Route not found",
   });
 });
+
+// Error Middleware (MUST BE LAST)
+app.use(errorMiddleware);
 
 export default app;

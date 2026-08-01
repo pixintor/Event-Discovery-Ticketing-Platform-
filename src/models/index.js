@@ -3,8 +3,14 @@ import sequelize from "../config/database.js";
 import User from "./User.js";
 import Event from "./Event.js";
 import Registration from "./registration.js";
+import Category from "./Category.js";
 
-// User → Events
+/*
+|--------------------------------------------------------------------------
+| User → Event
+|--------------------------------------------------------------------------
+*/
+
 User.hasMany(Event, {
   foreignKey: "organizerId",
   as: "events",
@@ -15,7 +21,28 @@ Event.belongsTo(User, {
   as: "organizer",
 });
 
-// Event → Registrations
+/*
+|--------------------------------------------------------------------------
+| Category → Event
+|--------------------------------------------------------------------------
+*/
+
+Category.hasMany(Event, {
+  foreignKey: "categoryId",
+  as: "events",
+});
+
+Event.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "category",
+});
+
+/*
+|--------------------------------------------------------------------------
+| Event → Registration
+|--------------------------------------------------------------------------
+*/
+
 Event.hasMany(Registration, {
   foreignKey: "eventId",
   as: "registrations",
@@ -26,4 +53,10 @@ Registration.belongsTo(Event, {
   as: "event",
 });
 
-export { sequelize, User, Event, Registration };
+export {
+  sequelize,
+  User,
+  Event,
+  Registration,
+  Category,
+};

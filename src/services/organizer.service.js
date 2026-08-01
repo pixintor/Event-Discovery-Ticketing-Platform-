@@ -9,7 +9,7 @@ export const createOrganizer = async (data) => {
   });
 
   if (existingUser) {
-    throw new Error("Email already exists");
+     throw new ConflictError("Email already exists");
   }
 
   const organizer = await User.create({
