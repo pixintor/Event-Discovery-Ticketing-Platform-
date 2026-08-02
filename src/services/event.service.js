@@ -7,6 +7,8 @@ import NotFoundError from "../errors/NotFoundError.js";
 
 import { generateRegistrationLink } from "../utils/generateRegistrationLink.js";
 
+import { generateEventCode } from "../utils/generateEventCode.js";
+
 
 
 export const createEvent = async (
@@ -29,6 +31,8 @@ export const createEvent = async (
     categoryId: data.categoryId,
 
     title: data.title,
+
+    eventCode: generateEventCode(data.title),
 
     slug: `${slugify(data.title, {
       lower: true,

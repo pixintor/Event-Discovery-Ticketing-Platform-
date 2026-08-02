@@ -157,7 +157,7 @@ Development dependencies:
 
 npm install -D nodemon
 
-
+npm install axios //for paystack
 
 
 ### Relationships
@@ -187,41 +187,47 @@ Attendees never login.
 
 ##### Registration Flow
 
-Organizer creates event
-
-↓
-
-System generates
-
-https://domain.com/register/9fh8329d
-
-↓
-
-Organizer shares link
-
-↓
-
-Attendee opens link
-
-↓
-
-Views event
-↓
-Registers
-↓
-Initialize Payment
-↓
-Complete Payment
-↓
-Verify Payment
-↓
-Create Registration
-↓
-Generate Ticket ID
-↓
-Generate QR Code
-↓
-Send Email Confirmation
+Organizer
+    │
+    ▼
+Creates Event
+    │
+    ▼
+Creates Ticket Types
+    │
+    ▼
+Publishes Event
+    │
+    ▼
+Registration Link Generated
+    │
+    ▼
+Attendee Opens Link
+    │
+    ▼
+Views Event Details
+    │
+    ▼
+Chooses Ticket Type
+    │
+    ▼
+Fills Registration Form
+    │
+    ▼
+Free Event? ──► Yes ──► Generate Ticket + QR Code
+      │
+      No
+      ▼
+Initialize Paystack Payment
+      │
+      ▼
+Payment Successful
+      │
+      ▼
+Generate Ticket + QR Code
+      │
+      ▼
+Send Confirmation Email
 
 
 
@@ -242,8 +248,8 @@ Authentication (User)
 
 # 📂 Categories
 
-| Method | Endpoint                 | Description        | Auth    |
-| ------ | ------------------------ | ------------------ | ------- |
+| Method | Endpoint                 | Description        | Auth      |
+| ------ | ------------------------ | ------------------ | ----------|
 | POST   | `/api/v1/categories`     | Create category    | ✅ Admin |
 | GET    | `/api/v1/categories`     | Get all categories | ❌       |
 | GET    | `/api/v1/categories/:id` | Get category by ID | ❌       |
@@ -305,6 +311,28 @@ Organizer
 
 
 
+| Method | Endpoint                             | Purpose                      |
+| ------ | ------------------------------------ | ---------------------------- |
+| POST   | `/api/v1/register/:registrationLink` | Public attendee registration |
+| GET    | `/api/v1/register/details/:id`       | View a registration          |
+| GET    | `/api/v1/register/event/:eventId`    | View event attendees         |
+| PATCH  | `/api/v1/register/:id/cancel`        | Cancel registration          |
+
+
+
+#
+
+| Step               | Method | Endpoint                                      | Body Required    |
+| ------------------ | ------ | --------------------------------------------- | ---------------- |
+| Register Attendee  | POST   | `/api/v1/register/:registrationLink`          | ✅                |
+| Initialize Payment | POST   | `/api/v1/payments/initialize/:registrationId` | ❌                |
+| Verify Payment     | GET    | `/api/v1/payments/verify?reference=...`       | ❌                |
+| Paystack Webhook   | POST   | `/api/v1/payments/webhook`                    | Sent by Paystack |
+| Check-in           | POST   | `/api/v1/check-in`                            | ✅                |
+
+
+
+
 
 seedAdmin
 
@@ -314,7 +342,7 @@ seedAdmin
 }
 
 
-FOR CREATING USER
+FOR CREATING USER-Organizer
 {
   "firstName": "",
   "lastName": "",
@@ -323,29 +351,117 @@ FOR CREATING USER
 }
 
 
-FOR CREATING TICKET
+FOR ORGANIZER LOGIN
+
 {
-  "eventId": "17245ff1-b244-45f1-b14d-10dee9709727",
-  "name": "Early Bird",
-  "price": 5000,
-  "quantity": 100,
-  "salesStart": "2026-08-05",
-  "salesEnd": "2026-08-20",
-  "maxPerAttendee": 2
+  "email": "john@example.com",
+  "password": "Password@123"
+}
+
+
+FOR CREATING EVENT CATEGORY
+
+{
+  "name": "Conference",
+  "description": "Business conferences and summits"
+}
+
+OR
+
+{
+  "name": "Music",
+  "description": "Concerts and music festivals"
 }
 
 
 
-###### Project Foundation (Completed)
-✔ Project Structure
-✔ Express Setup
-✔ PostgreSQL Configuration
-✔ Sequelize Configuration
-✔ Environment Variables
-✔ Mail Configuration
-✔ User Model
-✔ Authentication
-✔ JWT
-✔ Authorization
-✔ Organizer Management
-✔ API Testing with Postman
+FOR CREATING EVENT
+
+{
+  "categoryId": "73549a34-8eb5-47d3-9ad0-8426f5045c10",
+  "title": "TechCrunch Africa Summit 2026",
+  "description": "Africa's biggest technology conference.",
+  "venue": "International Conference Centre",
+  "address": "Area 10, Abuja",
+  "state": "FCT",
+  "startDate": "2026-09-15T09:00:00.000Z",
+  "endDate": "2026-09-15T18:00:00.000Z",
+  "registrationDeadline": "2026-09-10T23:59:59.000Z",
+  "capacity": 500,
+  "isPaid": true
+}
+
+
+
+FOR CREATING TICKET
+{
+  "eventId": "bc02862e-03d6-4d5f-a1c9-f1a730adaf05",
+  "name": "Regular",
+  "description": "General admission ticket",
+  "price": 5000,
+  "quantity": 300,
+  "salesStart": "2026-08-01T00:00:00.000Z",
+  "salesEnd": "2026-09-10T23:59:59.000Z",
+  "maxPerAttendee": 5
+}
+
+OR
+
+{
+  "eventId": "bc02862e-03d6-4d5f-a1c9-f1a730adaf05",
+  "name": "VIP",
+  "description": "VIP Access",
+  "price": 25000,
+  "quantity": 100,
+  "salesStart": "2026-08-01T00:00:00.000Z",
+  "salesEnd": "2026-09-10T23:59:59.000Z",
+  "maxPerAttendee": 2
+}
+
+OR
+
+{
+  "eventId": "bc02862e-03d6-4d5f-a1c9-f1a730adaf05",
+  "name": "Early Bird",
+  "description": "Discounted ticket",
+  "price": 3000,
+  "quantity": 100,
+  "salesStart": "2026-08-01T00:00:00.000Z",
+  "salesEnd": "2026-08-20T23:59:59.000Z",
+  "maxPerAttendee": 2
+},
+
+
+Register for Event
+
+POST /api/v1/register/:registrationLink
+
+Replace:
+
+PUT_TICKET_TYPE_UUID_HERE
+
+with the ID returned from:
+
+GET /api/v1/tickets
+
+eg: POST /api/v1/register/7da41b9d885bf881ad72ea0214e6469d
+
+{
+  "ticketTypeId": "PUT_TICKET_TYPE_UUID_HERE",
+  "firstName": "David",
+  "lastName": "Johnson",
+  "email": "david@example.com",
+  "phone": "08011223344",
+  "quantity": 2
+}
+
+OR
+
+{
+  "ticketTypeId": "ce1963fd-b347-4da2-9c9c-852f5e8aac24",
+  "firstName": "Sarah",
+  "lastName": "Williams",
+  "email": "sarah@example.com",
+  "phone": "08099887766",
+  "quantity": 1
+}

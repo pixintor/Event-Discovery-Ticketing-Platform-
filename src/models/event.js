@@ -25,6 +25,12 @@ const Event = sequelize.define(
       allowNull: false,
     },
 
+    eventCode: {
+      type: DataTypes.STRING(10),
+      allowNull: true,
+      unique: true,
+    },
+
     slug: {
       type: DataTypes.STRING,
       unique: true,

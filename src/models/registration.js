@@ -10,7 +10,22 @@ const Registration = sequelize.define(
       primaryKey: true,
     },
 
-    fullName: {
+    eventId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+
+    ticketTypeId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -28,7 +43,42 @@ const Registration = sequelize.define(
       allowNull: false,
     },
 
-    ticketId: {
+    quantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+    },
+
+    totalAmount: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0,
+    },
+
+    paymentReference: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+
+    paymentStatus: {
+      type: DataTypes.ENUM(
+        "PENDING",
+        "PAID",
+        "FAILED",
+        "REFUNDED"
+      ),
+      defaultValue: "PENDING",
+    },
+
+    registrationStatus: {
+      type: DataTypes.ENUM(
+        "PENDING",
+        "CONFIRMED",
+        "CANCELLED"
+      ),
+      defaultValue: "PENDING",
+    },
+
+    ticketNumber: {
       type: DataTypes.STRING,
       unique: true,
     },
@@ -48,6 +98,7 @@ const Registration = sequelize.define(
   },
   {
     tableName: "registrations",
+    timestamps: true,
   }
 );
 

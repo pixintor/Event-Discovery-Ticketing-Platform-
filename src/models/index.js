@@ -73,6 +73,23 @@ TicketType.belongsTo(Event, {
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Ticket Type → Registration
+|--------------------------------------------------------------------------
+*/
+
+TicketType.hasMany(Registration, {
+  foreignKey: "ticketTypeId",
+  as: "registrations",
+});
+
+Registration.belongsTo(TicketType, {
+  foreignKey: "ticketTypeId",
+  as: "ticketType",
+});
+
+
 export {
   sequelize,
   User,
