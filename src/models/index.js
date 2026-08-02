@@ -4,6 +4,7 @@ import User from "./User.js";
 import Event from "./Event.js";
 import Registration from "./registration.js";
 import Category from "./Category.js";
+import Analytics from "./analytics.js";
 
 /*
 |--------------------------------------------------------------------------
@@ -53,10 +54,4 @@ Registration.belongsTo(Event, {
   as: "event",
 });
 
-export {
-  sequelize,
-  User,
-  Event,
-  Registration,
-  Category,
-};
+export { sequelize, User, Event, Registration, Category, Analytics };
