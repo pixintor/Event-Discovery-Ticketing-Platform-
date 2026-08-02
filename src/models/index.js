@@ -3,7 +3,8 @@ import sequelize from "../config/database.js";
 import User from "./User.js";
 import Event from "./Event.js";
 import Registration from "./registration.js";
-import Category from "./Category.js";
+import Category from "./category.js";
+import TicketType from "./TicketType.js";
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Event.belongsTo(Category, {
 
 /*
 |--------------------------------------------------------------------------
-| Event → Registration
+| Event → type
 |--------------------------------------------------------------------------
 */
 
@@ -53,10 +54,47 @@ Registration.belongsTo(Event, {
   as: "event",
 });
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Event → Ticket Types
+|--------------------------------------------------------------------------
+*/
+
+Event.hasMany(TicketType, {
+  foreignKey: "eventId",
+  as: "ticketTypes",
+});
+
+TicketType.belongsTo(Event, {
+  foreignKey: "eventId",
+  as: "event",
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Ticket Type → Registration
+|--------------------------------------------------------------------------
+*/
+
+TicketType.hasMany(Registration, {
+  foreignKey: "ticketTypeId",
+  as: "registrations",
+});
+
+Registration.belongsTo(TicketType, {
+  foreignKey: "ticketTypeId",
+  as: "ticketType",
+});
+
+
 export {
   sequelize,
   User,
   Event,
   Registration,
   Category,
+  TicketType,
 };

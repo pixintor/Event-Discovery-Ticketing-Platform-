@@ -45,3 +45,23 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+// EMAIL VERIFICATION
+
+export const verifyEmail = async (req, res, next ) => {
+  try {
+    await authService.verifyEmail(
+      req.params.token
+    );
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Email verified successfully. You can now log in.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
