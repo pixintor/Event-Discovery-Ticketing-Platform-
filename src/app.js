@@ -11,6 +11,8 @@ import eventRoutes from "./routes/event.routes.js";
 import ticketRoutes from "./routes/ticket.routes.js";
 import registrationRoutes from "./routes/registration.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
+import paymentSetupRoutes from "./routes/paymentSetup.routes.js";
+import checkinRoutes from "./routes/checkin.routes.js";
 
 
 
@@ -39,6 +41,8 @@ app.use("/api/v1/events", eventRoutes);
 app.use("/api/v1/tickets", ticketRoutes);
 app.use("/api/v1/register", registrationRoutes);
 app.use("/api/v1/payments", paymentRoutes);
+app.use( "/api/v1/payment-setup", paymentSetupRoutes);
+app.use( "/api/v1/check-in", checkinRoutes);
 
 
 // 404

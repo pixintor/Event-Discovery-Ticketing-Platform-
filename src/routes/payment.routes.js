@@ -18,8 +18,10 @@ router.get(
   verifyPayment
 );
 
+
 router.post(
   "/webhook",
+  express.raw({ type: "application/json" }),
   webhook
 );
 

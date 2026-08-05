@@ -85,3 +85,31 @@ export const sendResetPasswordEmail = async ({
     html,
   });
 };
+
+
+/**
+ * Send Ticket Confirmation Email
+ */
+export const sendTicketEmail = async (
+  registration
+) => {
+  const html = `
+    <h2>Registration Confirmed</h2>
+
+    <p>Hello ${registration.firstName},</p>
+
+    <p>Your payment has been confirmed successfully.</p>
+
+    <p><strong>Ticket Number:</strong> ${registration.ticketNumber}</p>
+
+    <p>Please present your QR Code at the event entrance for check-in.</p>
+
+    <p>Thank you for registering.</p>
+  `;
+
+  await sendEmail({
+    to: registration.email,
+    subject: "Your Event Ticket",
+    html,
+  });
+};

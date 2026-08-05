@@ -1,4 +1,5 @@
 import axios from "axios";
+import crypto from "crypto";
 import { sequelize } from "../models/index.js";
 import {
   Registration,
@@ -11,6 +12,8 @@ import { generateQRCode } from "../utils/generateQRCode.js";
 
 import NotFoundError from "../errors/NotFoundError.js";
 import BadRequestError from "../errors/BadRequestError.js";
+import { calculatePlatformCommission } from "../utils/commission.js";
+import { sendTicketEmail } from "../services/email.service.js";
 
 
 ///////////// Initialize Payment
@@ -18,8 +21,18 @@ import BadRequestError from "../errors/BadRequestError.js";
 export const initializePayment = async (
   registrationId
 ) => {
-  const registration =
-    await Registration.findByPk(registrationId);
+  const registration = await Registration.findByPk(registrationId, {
+    include: [
+      {
+        association: "event",
+        include: [
+          {
+            association: "organizer",
+          },
+        ],
+      },
+    ],
+  });
 
   if (!registration) {
     throw new NotFoundError(
@@ -27,26 +40,55 @@ export const initializePayment = async (
     );
   }
 
+  const organizer =
+  registration.event.organizer;
+
+if (!organizer) {
+  throw new NotFoundError(
+    "Organizer not found."
+  );
+}
+
+if (!organizer.paymentSetupCompleted) {
+  throw new BadRequestError(
+    "Organizer has not completed payment setup."
+  );
+}
+
   if (registration.paymentStatus === "PAID") {
     throw new BadRequestError(
       "Registration has already been paid."
     );
   }
 
-  const payload = {
-    email: registration.email,
+const payload = {
+  email: registration.email,
 
-    amount:
-      Number(registration.totalAmount) * 100,
+  amount:
+    Number(registration.totalAmount) * 100,
 
-    callback_url:
-      process.env.PAYSTACK_CALLBACK_URL,
+  callback_url:
+    process.env.PAYSTACK_CALLBACK_URL,
 
-    metadata: {
-      registrationId: registration.id,
-    },
-  };
+  subaccount:
+    organizer.paystackSubaccountCode,
 
+  bearer: "subaccount",
+
+  
+
+  metadata: {
+    registrationId: registration.id,
+    organizerId: organizer.id,
+    eventId: registration.event.id,
+  },
+
+    transaction_charge:
+    calculatePlatformCommission(
+      registration.totalAmount
+    ),
+
+};
   const response = await axios.post(
     "https://api.paystack.co/transaction/initialize",
     payload,
@@ -72,8 +114,6 @@ export const initializePayment = async (
 ///////// verify Payment
 
 export const verifyPayment = async (reference) => {
-  const transaction = await sequelize.transaction();
-
   try {
     // Verify with Paystack
     const response = await axios.get(
@@ -87,57 +127,146 @@ export const verifyPayment = async (reference) => {
 
     const payment = response.data.data;
 
-    if (payment.status !== "success") {
-      throw new BadRequestError("Payment verification failed.");
+    if (!payment) {
+      throw new BadRequestError(
+        "Invalid Paystack response."
+      );
     }
 
-    // Find registration
+    if (payment.status !== "success") {
+      throw new BadRequestError(
+        "Payment verification failed."
+      );
+    }
+
+    // Find Registration
     const registration = await Registration.findOne({
       where: {
         paymentReference: reference,
       },
-      transaction,
     });
 
     if (!registration) {
-      throw new NotFoundError("Registration not found.");
+      throw new NotFoundError(
+        "Registration not found."
+      );
     }
 
     // Already paid
     if (registration.paymentStatus === "PAID") {
-      await transaction.commit();
       return registration;
     }
 
-    // Generate Ticket Number
-    const ticketNumber = await generateTicketNumber(
-      registration.eventId,
-      registration.ticketTypeId
-    );
+    return await completeRegistrationPayment(registration);
 
-    // Generate QR Code
-    const qrCode = await generateQRCode({
-      registrationId: registration.id,
-      ticketNumber,
-      eventId: registration.eventId,
-      ticketTypeId: registration.ticketTypeId,
-    });
+  } catch (error) {  
+    
+  console.log("PAYSTACK ERROR:");
+  console.log(error.response?.data || error.message);
 
-    // Update Registration
-    registration.paymentStatus = "PAID";
-    registration.registrationStatus = "CONFIRMED";
-    registration.ticketNumber = ticketNumber;
-    registration.qrCode = qrCode;
 
-    await registration.save({
-      transaction,
-    });
-
-    await transaction.commit();
-
-    return registration;
-  } catch (error) {
-    await transaction.rollback();
     throw error;
   }
+};
+
+//////handle webhook
+
+export const handleWebhook = async (req) => {
+
+  // Verify Paystack Signature
+
+  const hash = crypto
+  .createHmac(
+    "sha512",
+    process.env.PAYSTACK_SECRET_KEY
+  )
+  .update(req.body)
+  .digest("hex");
+
+const signature =
+  req.headers["x-paystack-signature"];
+
+if (hash !== signature) {
+  throw new BadRequestError(
+    "Invalid Paystack signature."
+  );
+}
+
+// Parse the Body
+  const event = JSON.parse(
+  req.body.toString()
+);
+
+// Ignore Unrelated Events
+if (event.event !== "charge.success") {
+  return;
+}
+
+// Get the Payment Reference
+const reference =
+  event.data.reference;
+
+  // Find Registration
+  const registration =
+  await Registration.findOne({
+    where: {
+      paymentReference: reference,
+    },
+  });
+
+if (!registration) {
+  throw new NotFoundError(
+    "Registration not found."
+  );
+}
+
+// Prevent Duplicate Processing
+if (
+  registration.paymentStatus === "PAID"
+) {
+  return;
+}
+
+return await completeRegistrationPayment(registration);
+
+
+};
+
+
+////helper function.
+
+export const completeRegistrationPayment = async (registration) => {
+ // Generate Ticket Number
+  const ticketNumber = await generateTicketNumber(
+    registration.eventId,
+    registration.ticketTypeId
+  );
+ // Generate QR code
+  const qrCode = await generateQRCode({
+    registrationId: registration.id,
+    ticketNumber,
+    eventId: registration.eventId,
+    ticketTypeId: registration.ticketTypeId,
+  });
+    // Update Registration
+  registration.paymentStatus = "PAID";
+  registration.registrationStatus = "CONFIRMED";
+  registration.ticketNumber = ticketNumber;
+  registration.qrCode = qrCode;
+
+  await registration.save();
+
+  try {
+  await sendTicketEmail(registration);
+} catch (error) {
+  console.error(
+  "Ticket email failed:",
+  error.message
+);
+}
+
+
+  return registration;
+
+  
 };

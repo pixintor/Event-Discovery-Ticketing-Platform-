@@ -309,7 +309,7 @@ Organizer
 | PATCH  | `/api/v1/tickets/:id/activate`   | Activate ticket    |
 | PATCH  | `/api/v1/tickets/:id/deactivate` | Deactivate ticket  |
 
-
+Register for Event
 
 | Method | Endpoint                             | Purpose                      |
 | ------ | ------------------------------------ | ---------------------------- |
@@ -464,4 +464,22 @@ OR
   "email": "sarah@example.com",
   "phone": "08099887766",
   "quantity": 1
+}
+
+
+
+
+Check-in
+
+JSON Body
+
+e.g
+{
+  "ticketNumber": "TCA-2026-EARLY_BIRD-000001"
+}
+
+Or, if your QR code contains the registration ID:
+
+{
+  "registrationId": "REGISTRATION_UUID"
 }

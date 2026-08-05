@@ -64,6 +64,41 @@ const User = sequelize.define(
       defaultValue: ROLES.ORGANIZER,
     },
 
+    paystackSubaccountCode: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
+paystackRecipientCode: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
+bankName: {
+type: DataTypes.STRING,
+allowNull: true,
+},
+
+accountNumber: {
+type: DataTypes.STRING,
+allowNull: true,
+},
+
+accountName: {
+type: DataTypes.STRING,
+allowNull: true,
+},
+
+bankCode: {
+type: DataTypes.STRING,
+allowNull: true,
+},
+
+paymentSetupCompleted: {
+type: DataTypes.BOOLEAN,
+defaultValue: false,
+},
+    
     isActive: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

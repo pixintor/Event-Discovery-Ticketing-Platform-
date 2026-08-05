@@ -63,9 +63,12 @@ export const verifyPayment = async (req, res, next) => {
 /**
  * Paystack Webhook
  */
-export const webhook = async (req, res) => {
-  return res.status(501).json({
-    success: false,
-    message: "Webhook endpoint is under development.",
-  });
+export const webhook = async (req, res, next) => {
+  try {
+    await paymentService.handleWebhook(req);
+
+    return res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
 };
