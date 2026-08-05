@@ -13,6 +13,9 @@ import registrationRoutes from "./routes/registration.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import paymentSetupRoutes from "./routes/paymentSetup.routes.js";
 import checkinRoutes from "./routes/checkin.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+import attendeeRoutes from "./routes/attendee.routes.js";
+import exportRoutes from "./routes/export.routes.js";
 
 
 
@@ -43,7 +46,9 @@ app.use("/api/v1/register", registrationRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use( "/api/v1/payment-setup", paymentSetupRoutes);
 app.use( "/api/v1/check-in", checkinRoutes);
-
+app.use( "/api/v1/organizer/dashboard", dashboardRoutes);
+app.use( "/api/v1/events/attendees", attendeeRoutes);
+app.use( "/api/v1/export", exportRoutes);
 
 // 404
 app.use((req, res) => {
