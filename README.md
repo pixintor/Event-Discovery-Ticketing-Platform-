@@ -331,7 +331,43 @@ Organizer
 | Check-in           | POST   | `/api/v1/check-in`                            | ✅                |
 
 
+#Email Campaign & Messaging Module
 
+The project includes an isolated email delivery service capable of handling transactional emails and multi-recipient campaign blasts using HTML templates.
+
+# 1. Environment Configuration
+Ensure the following variables are defined in your `.env` file before starting the server:
+
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `EMAIL_HOST` | SMTP server host | `smtp.gmail.com` or `sandbox.smtp.mailtrap.io` |
+| `EMAIL_PORT` | Port for SMTP provider | `587` or `2525` |
+| `EMAIL_USER` | SMTP username / email address | `user@example.com` |
+| `EMAIL_PASS` | SMTP password / app secret | `your_secret_password` |
+| `APP_NAME` | Display name for email sender | `"My Application"` |
+
+# 2. Campaign Endpoints
+
+# Single Campaign Email
+Sends a personalized HTML campaign email to a single user.
+* **URL:** `/api/v1/campaigns/send-single`
+* **Method:** `POST`
+* **Header:** `Content-Type: application/json`
+* **Body:**
+```json
+{
+  "email": "recipient@example.com",
+  "subject": "Platform Update",
+  "templateName": "campaignEmail.html",
+  "templateData": {
+    "title": "New Features Live",
+    "firstName": "Alex",
+    "messageBody": "We updated our application with new tools.",
+    "ctaUrl": "http://localhost:3000/dashboard",
+    "ctaText": "View Dashboard",
+    "appName": "My App"
+  }
+}
 
 
 seedAdmin

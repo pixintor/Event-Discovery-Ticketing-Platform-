@@ -11,7 +11,7 @@ import eventRoutes from "./routes/event.routes.js";
 import ticketRoutes from "./routes/ticket.routes.js";
 import registrationRoutes from "./routes/registration.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
-
+import emailCampaignRoutes from "./routes/emailcampaign.routes.js";
 
 
 const app = express();
@@ -39,7 +39,7 @@ app.use("/api/v1/events", eventRoutes);
 app.use("/api/v1/tickets", ticketRoutes);
 app.use("/api/v1/register", registrationRoutes);
 app.use("/api/v1/payments", paymentRoutes);
-
+app.use("/api/v1/emailcampaign", emailCampaignRoutes);
 
 // 404
 app.use((req, res) => {

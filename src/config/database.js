@@ -6,21 +6,26 @@ dotenv.config();
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  process.env.DB_PASS,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    port: Number(process.env.DB_PORT) || 5432,
     dialect: "postgres",
-    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Prevents self-signed certificate errors
+      },
+    },
   }
 );
 
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log("Database Connected Successfully");
+    return "Database Connected Successfully";
   } catch (error) {
-    console.error(error);
+    return "Database connection error:", error;
     process.exit(1);
   }
 };

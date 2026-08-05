@@ -17,7 +17,16 @@ const loadTemplate = async (filename) => {
     "utf8"
   );
 };
+//Replace dynamic placeholders in HTML templates
+const compileTemplate = (template, data = {}) => {
+  let compiled = template;
+  for (const [key, value] of Object.entries(data)) {
 
+    // Replaces all occurrences of {{key}} throughout the template
+    compiled = compiled.replaceAll(`{{${key}}}`, value);
+  }
+  return compiled;
+};
 /**
  * Send Email
  */
@@ -84,4 +93,33 @@ export const sendResetPasswordEmail = async ({
     subject: "Reset Your Password",
     html,
   });
+};
+
+/**
+ * Send Individual Campaign Email
+ */
+export const sendCampaignEmail = async ({ email, subject, templateName, templateData }) => {
+  const rawTemplate = await loadTemplate(templateName);
+  const html = compileTemplate(rawTemplate, templateData);
+
+  await sendEmail({
+    to: email,
+    subject,
+    html,
+  });
+};
+
+// Send Bulk Campaign Email 
+export const sendBulkCampaignEmail = async ({ recipients, subject, templateName }) => {
+  const rawTemplate = await loadTemplate(templateName);
+
+  // Send individually to protect recipient privacy and allow personalization
+  for (const user of recipients) {
+    const html = compileTemplate(rawTemplate, user);
+    await sendEmail({
+      to: user.email,
+      subject,
+      html,
+    });
+  }
 };
