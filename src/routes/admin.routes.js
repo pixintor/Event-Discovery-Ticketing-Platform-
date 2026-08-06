@@ -2,6 +2,8 @@ import express from "express";
 import * as adminController from "../controllers/admin.controller.js";
 import authenticate from "../middleware/auth.middleware.js";
 import authorize from "../middleware/role.middleware.js";
+import { createAdminValidator } from "../validators/admin.validator.js";
+import validateRequest from "../middleware/validate.middleware.js";
 
 const router = express.Router();
 
@@ -35,5 +37,13 @@ router.get(
   "/revenue-report",
   adminController.revenueReport
 );
+
+router.post(
+  "/admins",
+  createAdminValidator,
+  validateRequest,
+  adminController.createAdmin
+);
+
 
 export default router;

@@ -331,6 +331,19 @@ Register for Event
 | Check-in           | POST   | `/api/v1/check-in`                            | ✅                |
 
 
+#Admin Management APIs
+
+| Method | Endpoint                          | Who Can Use |
+| ------ | --------------------------------- | ----------- |
+| POST   | `/api/v1/admin/admins`            | Super Admin |
+| GET    | `/api/v1/admin/admins`            | Super Admin |
+| PATCH  | `/api/v1/admin/admins/:id`        | Super Admin |
+| PATCH  | `/api/v1/admin/admins/:id/status` | Super Admin |
+| DELETE | `/api/v1/admin/admins/:id`        | Super Admin |
+
+
+
+
 
 
 

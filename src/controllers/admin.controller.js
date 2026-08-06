@@ -1,4 +1,5 @@
 import * as adminService from "../services/admin.service.js";
+import ForbiddenError from "../errors/ForbiddenError.js";
 
 export const dashboard = async (req, res, next) => {
   try {
@@ -137,6 +138,34 @@ export const revenueReport = async (
       success: true,
       data: report,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// //Creat Admin
+
+export const createAdmin = async (
+  req,
+  res,
+  next
+) => {
+  try {
+
+if (req.user.adminLevel !== "SUPER_ADMIN") {
+  throw new ForbiddenError(
+    "Only Super Admins can perform this action."
+  );
+}
+
+    const admin = await adminService.createAdmin(req.body);
+
+    res.status(201).json({
+      success: true,
+      message: "Admin created successfully.",
+      data: admin,
+    });
+
   } catch (error) {
     next(error);
   }

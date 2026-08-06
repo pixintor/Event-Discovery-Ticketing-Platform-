@@ -1,11 +1,9 @@
-import {
-  User,
-  Event,
-  Registration,
-} from "../models/index.js";
-
 import { Op } from "sequelize";
+import bcrypt from "bcryptjs";
+
+import { User, Event, Registration,} from "../models/index.js";
 import { calculatePlatformCommission } from "../utils/commission.js";
+import ConflictError from "../errors/ConflictError.js";
 
 // /////Dashboard
 
@@ -297,4 +295,41 @@ export const getRegistrations =
 
     organizerRevenue,
   };
+};
+
+// ///  Create Admin
+export const createAdmin = async ({
+  firstName,
+  lastName,
+  email,
+  password,
+  phone,
+  adminLevel = "STANDARD",
+}) => {
+
+  const existingUser = await User.findOne({
+    where: { email },
+  });
+
+  if (existingUser) {
+    throw new ConflictError("Email already exists.");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const admin = await User.create({
+    firstName,
+    lastName,
+    email,
+    phone,
+    password: hashedPassword,
+    role: "ADMIN",
+    adminLevel,
+    emailVerified: true,
+    isActive: true,
+  });
+
+  const { password: _, ...data } = admin.toJSON();
+
+  return data;
 };

@@ -64,6 +64,10 @@ const User = sequelize.define(
       defaultValue: ROLES.ORGANIZER,
     },
 
+   adminLevel: {
+  type: DataTypes.ENUM("SUPER_ADMIN", "ADMIN"),
+  defaultValue: "ADMIN",
+},
     paystackSubaccountCode: {
   type: DataTypes.STRING,
   allowNull: true,

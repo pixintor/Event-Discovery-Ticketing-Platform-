@@ -14,19 +14,25 @@ const seedAdmin = async () => {
       },
     });
 
-    if (adminExists) {
-      console.log("Admin already exists.");
-      process.exit();
-    }
+if (adminExists) {
+  adminExists.adminLevel = "SUPER_ADMIN";
+  adminExists.emailVerified = true;
+  await adminExists.save();
 
-    await User.create({
-      firstName: "System",
-      lastName: "Administrator",
-      email: "admin@example.com",
-      password: "Admin@123",
-      role: "ADMIN",
-      isActive: true,
-    });
+  console.log("Admin updated to SUPER ADMIN.");
+  process.exit();
+}
+
+await User.create({
+  firstName: "System",
+  lastName: "Administrator",
+  email: "admin@example.com",
+  password: "Admin@123",
+  role: "ADMIN",
+  adminLevel: "SUPER_ADMIN",
+  isActive: true,
+  emailVerified: true,
+});
 
     console.log("Admin created successfully.");
 
