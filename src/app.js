@@ -16,6 +16,8 @@ import checkinRoutes from "./routes/checkin.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import attendeeRoutes from "./routes/attendee.routes.js";
 import exportRoutes from "./routes/export.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import campaignRoutes from "./routes/campaign.routes.js";
 
 
 
@@ -49,6 +51,8 @@ app.use( "/api/v1/check-in", checkinRoutes);
 app.use( "/api/v1/organizer/dashboard", dashboardRoutes);
 app.use( "/api/v1/events/attendees", attendeeRoutes);
 app.use( "/api/v1/export", exportRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/campaigns", campaignRoutes);
 
 // 404
 app.use((req, res) => {

@@ -9,7 +9,7 @@ import { checkIn } from "../controllers/checkin.controller.js";
 const router = Router();
 
 router.post(
-  "/:ticketNumber",
+  "/",
   authenticate,
   authorize("ORGANIZER"),
   checkIn

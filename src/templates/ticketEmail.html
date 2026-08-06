@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+padding:30px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:#ffffff;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.header{
+background:#0d6efd;
+color:white;
+padding:20px;
+text-align:center;
+border-radius:8px;
+}
+
+.ticket{
+margin-top:25px;
+text-align:center;
+}
+
+.ticket img{
+width:220px;
+height:220px;
+}
+
+.footer{
+margin-top:30px;
+font-size:13px;
+color:#777;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h2>Registration Successful</h2>
+
+</div>
+
+<p>Hello <strong>{{firstName}}</strong>,</p>
+
+<p>Your payment has been confirmed successfully.</p>
+
+<p>
+Your ticket number is:
+</p>
+
+<h2>{{ticketNumber}}</h2>
+
+<div class="ticket">
+
+<h3>Your QR Code</h3>
+
+<img src="{{qrCode}}" alt="QR Code">
+
+</div>
+
+<p>
+Please present this QR code at the entrance for fast check-in.
+</p>
+
+<div class="footer">
+
+<p>Powered by Event Discovery & Ticketing Platform</p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

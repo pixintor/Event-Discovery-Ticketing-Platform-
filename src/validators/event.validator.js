@@ -21,7 +21,7 @@ export const createEventSchema = Joi.object({
 
   startDate: Joi.date().required(),
 
-  endDate: Joi.date().greater(Joi.ref("startDate")).required(),
+  endDate: Joi.date().min(Joi.ref("startDate")).required(),
 
   registrationDeadline: Joi.date()
     .less(Joi.ref("startDate"))

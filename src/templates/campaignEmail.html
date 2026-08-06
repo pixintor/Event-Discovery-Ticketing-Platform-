@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Event Update</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    background:#f4f7fb;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.container{
+    max-width:650px;
+    margin:30px auto;
+    background:#ffffff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.header{
+    background:#2563eb;
+    color:#fff;
+    text-align:center;
+    padding:35px;
+}
+
+.header h1{
+    margin:0;
+    font-size:30px;
+}
+
+.header p{
+    margin-top:8px;
+    opacity:.9;
+}
+
+.content{
+    padding:35px;
+    color:#444;
+    line-height:1.7;
+}
+
+.info-box{
+    background:#f9fafc;
+    border-left:5px solid #2563eb;
+    padding:18px;
+    border-radius:8px;
+    margin:25px 0;
+}
+
+.info-box h3{
+    margin-top:0;
+    color:#2563eb;
+}
+
+.message{
+    background:#eef6ff;
+    border-radius:8px;
+    padding:18px;
+    margin:25px 0;
+    white-space:pre-line;
+}
+
+.button{
+    display:inline-block;
+    padding:14px 30px;
+    background:#2563eb;
+    color:white !important;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.footer{
+    background:#111827;
+    color:#d1d5db;
+    text-align:center;
+    padding:30px;
+    font-size:14px;
+}
+
+.footer a{
+    color:white;
+    text-decoration:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h1>{{APP_NAME}}</h1>
+
+<p>Official Event Notification</p>
+
+</div>
+
+<div class="content">
+
+<h2>Hello {{FIRST_NAME}},</h2>
+
+<p>
+
+We hope you're doing well.
+
+Our team has an important update regarding your upcoming event.
+
+</p>
+
+<div class="message">
+
+{{MESSAGE}}
+
+</div>
+
+<div class="info-box">
+
+<h3>Event Details</h3>
+
+<p><strong>Event:</strong> {{EVENT}}</p>
+
+<p><strong>Date:</strong> {{DATE}}</p>
+
+<p><strong>Time:</strong> {{TIME}}</p>
+
+<p><strong>Venue:</strong> {{VENUE}}</p>
+
+</div>
+
+<p>
+
+Please keep your QR Code or Ticket Number available during check-in.
+
+</p>
+
+<center>
+
+<a href="{{EVENT_LINK}}" class="button">
+
+View Event
+
+</a>
+
+</center>
+
+<br><br>
+
+<p>
+
+Thank you for choosing <strong>{{APP_NAME}}</strong>.
+
+We look forward to seeing you.
+
+</p>
+
+</div>
+
+<div class="footer">
+
+<strong>{{APP_NAME}}</strong>
+
+<br><br>
+
+Powered by MARLB MEDIA
+
+<br><br>
+
+© {{YEAR}} All Rights Reserved
+
+</div>
+
+</div>
+
+</body>
+
+</html>

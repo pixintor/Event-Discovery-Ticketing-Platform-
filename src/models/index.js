@@ -5,7 +5,10 @@ import Event from "./Event.js";
 import Registration from "./registration.js";
 import Category from "./category.js";
 import TicketType from "./TicketType.js";
+import CampaignModel from "./Campaign.js";
 
+
+const Campaign = CampaignModel(sequelize);
 /*
 |--------------------------------------------------------------------------
 | User → Event
@@ -96,6 +99,25 @@ Registration.belongsTo(TicketType, {
 |--------------------------------------------------------------------------
 */
 
+Event.hasMany(Campaign, {
+  foreignKey: "eventId",
+  as: "campaigns",
+});
+
+Campaign.belongsTo(Event, {
+  foreignKey: "eventId",
+  as: "event",
+});
+
+User.hasMany(Campaign, {
+  foreignKey: "organizerId",
+  as: "campaigns",
+});
+
+Campaign.belongsTo(User, {
+  foreignKey: "organizerId",
+  as: "organizer",
+});
 
 
 
@@ -107,4 +129,5 @@ export {
   Registration,
   Category,
   TicketType,
+  Campaign,
 };

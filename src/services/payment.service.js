@@ -49,6 +49,13 @@ if (!organizer) {
   );
 }
 
+console.log({
+  organizerId: organizer.id,
+  email: organizer.email,
+  paymentSetupCompleted: organizer.paymentSetupCompleted,
+  paystackSubaccountCode: organizer.paystackSubaccountCode,
+});
+
 if (!organizer.paymentSetupCompleted) {
   throw new BadRequestError(
     "Organizer has not completed payment setup."

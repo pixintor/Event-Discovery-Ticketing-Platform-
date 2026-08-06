@@ -90,26 +90,79 @@ export const sendResetPasswordEmail = async ({
 /**
  * Send Ticket Confirmation Email
  */
-export const sendTicketEmail = async (
-  registration
-) => {
-  const html = `
-    <h2>Registration Confirmed</h2>
+export const sendTicketEmail = async (registration) => {
+  const template = await loadTemplate("ticketEmail.html");
 
-    <p>Hello ${registration.firstName},</p>
-
-    <p>Your payment has been confirmed successfully.</p>
-
-    <p><strong>Ticket Number:</strong> ${registration.ticketNumber}</p>
-
-    <p>Please present your QR Code at the event entrance for check-in.</p>
-
-    <p>Thank you for registering.</p>
-  `;
+  const html = template
+    .replace("{{firstName}}", registration.firstName)
+    .replace("{{ticketNumber}}", registration.ticketNumber)
+    .replace("{{qrCode}}", registration.qrCode);
 
   await sendEmail({
     to: registration.email,
     subject: "Your Event Ticket",
     html,
   });
+};
+
+/////Send Campaign Email
+
+export const sendCampaignEmail = async ({
+  to,
+  firstName,
+  subject,
+  message,
+  event,
+}) => {
+
+  const template =
+    await loadTemplate(
+      "campaignEmail.html"
+    );
+
+  const html = template
+    .replaceAll(
+      "{{APP_NAME}}",
+      process.env.APP_NAME
+    )
+    .replace(
+      "{{FIRST_NAME}}",
+      firstName
+    )
+    .replace(
+      "{{MESSAGE}}",
+      message
+    )
+    .replace(
+      "{{EVENT}}",
+      event.title
+    )
+    .replace(
+      "{{DATE}}",
+      new Date(event.startDate)
+        .toLocaleDateString()
+    )
+    .replace(
+      "{{TIME}}",
+      event.startTime
+    )
+    .replace(
+      "{{VENUE}}",
+      event.venue
+    )
+    .replace(
+      "{{EVENT_LINK}}",
+      `${process.env.FRONTEND_URL}/events/${event.id}`
+    )
+    .replace(
+      "{{YEAR}}",
+      new Date().getFullYear()
+    );
+
+  await sendEmail({
+    to,
+    subject,
+    html,
+  });
+
 };

@@ -19,6 +19,7 @@ export const createRegistrationSchema = Joi.object({
 
   email: Joi.string()
     .email()
+    .lowercase()
     .required(),
 
   phone: Joi.string()
