@@ -5,115 +5,134 @@ event-ticketing-platform/
 
 event-ticketing-platform/
 
+```text
+captstone-project/
 │
 ├── src/
-│
-├── config/
-│      database.js
-│      mail.js
-│
-├── constants/
-│      roles.js
-│      eventStatus.js
-│      paymentStatus.js
-│      ticketTypes.js
-│
-├── controllers/
-│      auth.controller.js
-│      admin.controller.js
-│      organizer.controller.js
-│      attendee.controller.js
-│      event.controller.js
-│      ticket.controller.js
-│      registration.controller.js
-│      payment.controller.js
-│      checkin.controller.js
-│      analytics.controller.js
-│
-├── middleware/
-│      auth.middleware.js
-│      role.middleware.js
-│      upload.middleware.js
-│      validate.middleware.js
-│      error.middleware.js
-│
-├── models/
-│      User.js
-│      Event.js
-│      TicketCategory.js
-│      Registration.js
-│      Payment.js
-│      CheckIn.js
-│      index.js
-│
-├── routes/
-│      auth.routes.js
-│      admin.routes.js
-│      organizer.routes.js
-│      attendee.routes.js
-│      event.routes.js
-│      ticket.routes.js
-│      registration.routes.js
-│      payment.routes.js
-│      analytics.routes.js
-│
-├── services/
-│      auth.service.js
-│      organizer.service.js
-│      event.service.js
-│      ticket.service.js
-│      registration.service.js
-│      payment.service.js
-│      qr.service.js
-│      email.service.js
-│      analytics.service.js
-│
-├── middleware/
-│      auth.middleware.js
-│      role.middleware.js
-│      upload.middleware.js
-│      validate.middleware.js
-│      error.middleware.js
-│
-├── utils/
-│      generateLink.js
-│      generateTicket.js
-│      generateQRCode.js
-│      pagination.js
-│      response.js
-│      paystack.js
-│
-├── validators/
-│      auth.validator.js
-│      organizer.validator.js
-│      event.validator.js
-│      ticket.validator.js
-│      registration.validator.js
-│      payment.validator.js
+│   │
+│   ├── config/
+│   │   ├── cloudinary.js
+│   │   ├── database.js
+│   │   ├── mail.js
+│   │   └── swagger.js
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── user.controller.js
+│   │   ├── category.controller.js
+│   │   ├── event.controller.js
+│   │   ├── ticket.controller.js
+│   │   ├── registration.controller.js
+│   │   ├── payment.controller.js
+│   │   ├── paymentSetup.controller.js
+│   │   ├── upload.controller.js
+│   │   ├── checkin.controller.js
+│   │   ├── dashboard.controller.js
+│   │   ├── analytics.controller.js
+│   │   ├── emailCampaign.controller.js
+│   │   └── export.controller.js
+│   │
+│   ├── middleware/
+│   │   ├── auth.middleware.js
+│   │   ├── role.middleware.js
+│   │   ├── upload.middleware.js
+│   │   ├── error.middleware.js
+│   │   └── notFound.middleware.js
+│   │
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Category.js
+│   │   ├── Event.js
+│   │   ├── TicketType.js
+│   │   ├── Registration.js
+│   │   └── index.js
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── user.routes.js
+│   │   ├── category.routes.js
+│   │   ├── event.routes.js
+│   │   ├── ticket.routes.js
+│   │   ├── registration.routes.js
+│   │   ├── payment.routes.js
+│   │   ├── paymentSetup.routes.js
+│   │   ├── upload.routes.js
+│   │   ├── checkin.routes.js
+│   │   ├── dashboard.routes.js
+│   │   ├── analytics.routes.js
+│   │   ├── emailCampaign.routes.js
+│   │   └── export.routes.js
+│   │
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   ├── user.service.js
+│   │   ├── category.service.js
+│   │   ├── event.service.js
+│   │   ├── ticket.service.js
+│   │   ├── registration.service.js
+│   │   ├── payment.service.js
+│   │   ├── paymentSetup.service.js
+│   │   ├── upload.service.js
+│   │   ├── checkin.service.js
+│   │   ├── dashboard.service.js
+│   │   ├── analytics.service.js
+│   │   ├── emailCampaign.service.js
+│   │   └── export.service.js
+│   │
+│   ├── validators/
+│   │   ├── auth.validator.js
+│   │   ├── user.validator.js
+│   │   ├── category.validator.js
+│   │   ├── event.validator.js
+│   │   ├── ticket.validator.js
+│   │   ├── registration.validator.js
+│   │   ├── payment.validator.js
+│   │   └── paymentSetup.validator.js
+│   │
+│   ├── utils/
+│   │   ├── cloudinaryUpload.js
+│   │   ├── deleteImage.js
+│   │   ├── email.js
+│   │   ├── generateQRCode.js
+│   │   ├── generateRegistrationLink.js
+│   │   ├── generateTicketNumber.js
+│   │   ├── generateEventCode.js
+│   │   ├── generateSlug.js
+│   │   ├── paystack.js
+│   │   ├── pagination.js
+│   │   ├── response.js
+│   │   └── token.js
+│   │
+│   ├── errors/
+│   │   ├── AppError.js
+│   │   ├── BadRequestError.js
+│   │   ├── UnauthorizedError.js
+│   │   ├── ForbiddenError.js
+│   │   ├── NotFoundError.js
+│   │   └── ConflictError.js
+│   │
+│   ├── templates/
+│   │   ├── verificationEmail.html
+│   │   ├── resetPassword.html
+│   │   ├── eventTicket.html
+│   │   ├── paymentSuccessful.html
+│   │   └── campaignEmail.html
+│   │
+│   └── app.js
 │
 ├── uploads/
-│      banners/
-│
-├── templates/
-│      confirmationEmail.html
-│      paymentReceipt.html
-│      eventUpdate.html
-│
-├── database/
-│      migrations/
-│      seeders/
-│
-├── docs/
-│      postman_collection.json
-│      swagger.yaml
-│
-├── app.js
-├── server.js
+│   └── (development only, optional)
 │
 ├── .env
+├── .env.example
+├── .gitignore
 ├── package.json
-│
+├── package-lock.json
+├── server.js
+├── swagger.js
 └── README.md
+```
+
 
 
 ## Packages 
@@ -149,7 +168,13 @@ npm install dayjs
 npm install morgan
 
 npm install slugify
+
 npm install joi
+
+npm install cloudinary
+
+npm install streamifier
+
 npm install express-rate-limit
 
 
@@ -229,7 +254,7 @@ Generate Ticket + QR Code
       ▼
 Send Confirmation Email
 
-
+Base URL: http://localhost:5000
 
 ###### 📚 API Documentation (Current Version)
 
@@ -244,6 +269,11 @@ Send Confirmation Email
 | POST   | `/api/v1/auth/verify-email` *(planned)*    | Verify email address       | ❌    |
 | POST   | `/api/v1/auth/forgot-password` *(planned)* | Request password reset     | ❌    |
 | POST   | `/api/v1/auth/reset-password` *(planned)*  | Reset password             | ❌    |
+
+# New Endpoints
+GET  /api/v1/auth/google
+GET  /api/v1/auth/google/callback
+
 
 
 # Organizer Payment Setup (MVP)
@@ -382,6 +412,7 @@ Organizer
 | ------ | ----------------------------------- |
 | POST   | `/api/v1/check-in/scan`             |
 | GET    | `/api/v1/check-in/history/:eventId` |
+
 
 
 # Organizer Dashboard

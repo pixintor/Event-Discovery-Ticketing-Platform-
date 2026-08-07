@@ -74,6 +74,18 @@ profilePicturePublicId: {
   allowNull: true,
 },
 
+googleId: {
+  type: DataTypes.STRING,
+  unique: true,
+  allowNull: true,
+},
+
+provider: {
+  type: DataTypes.ENUM("LOCAL", "GOOGLE"),
+  defaultValue: "LOCAL",
+},
+
+
    adminLevel: {
   type: DataTypes.ENUM("SUPER_ADMIN", "ADMIN"),
   defaultValue: "ADMIN",

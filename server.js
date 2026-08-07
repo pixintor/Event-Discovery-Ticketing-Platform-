@@ -17,9 +17,11 @@ const startServer = async () => {
        // await verifyMailConnection(); // Optional for now
 
     // Synchronize Sequelize models
-    await sequelize.sync({
-      alter: true, // Development only
-    });
+    // await sequelize.sync({
+    //   alter: true, // Development only
+    // });
+
+    await sequelize.sync();
 
     console.log(" Database synchronized.");
 

@@ -331,5 +331,7 @@ export const createAdmin = async ({
 
   const { password: _, ...data } = admin.toJSON();
 
+  loginWithGoogle()
+
   return data;
 };
