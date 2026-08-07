@@ -2,7 +2,7 @@ import sequelize from "../config/database.js";
 
 import User from "./user.js";
 import Event from "./event.js";
-import Registration from "./Registration.js";
+import Registration from "./registration.js";
 import Category from "./Category.js";
 import TicketType from "./TicketType.js";
 import CampaignModel from "./Campaign.js";
