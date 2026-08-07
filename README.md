@@ -40,7 +40,7 @@ captstone-project/
 │   │   └── notFound.middleware.js
 │   │
 │   ├── models/
-│   │   ├── User.js
+│   │   ├── user.js
 │   │   ├── Category.js
 │   │   ├── Event.js
 │   │   ├── TicketType.js

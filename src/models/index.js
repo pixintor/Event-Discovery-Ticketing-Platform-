@@ -1,6 +1,6 @@
 import sequelize from "../config/database.js";
 
-import User from "./User.js";
+import User from "./user.js";
 import Event from "./Event.js";
 import Registration from "./registration.js";
 import Category from "./category.js";
