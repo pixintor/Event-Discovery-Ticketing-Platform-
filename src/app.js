@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "../swagger.js"; // adjust path if necessary
+
 
 import authRoutes from "./routes/auth.routes.js";
 import organizerRoutes from "./routes/organizer.routes.js";
@@ -18,6 +21,7 @@ import attendeeRoutes from "./routes/attendee.routes.js";
 import exportRoutes from "./routes/export.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import campaignRoutes from "./routes/campaign.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 
 
 
@@ -53,6 +57,9 @@ app.use( "/api/v1/events/attendees", attendeeRoutes);
 app.use( "/api/v1/export", exportRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/campaigns", campaignRoutes);
+app.use("/api/v1/upload", uploadRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // 404
 app.use((req, res) => {

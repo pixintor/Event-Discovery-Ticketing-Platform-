@@ -64,6 +64,16 @@ const User = sequelize.define(
       defaultValue: ROLES.ORGANIZER,
     },
 
+    profilePicture: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
+profilePicturePublicId: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
    adminLevel: {
   type: DataTypes.ENUM("SUPER_ADMIN", "ADMIN"),
   defaultValue: "ADMIN",

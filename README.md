@@ -233,7 +233,7 @@ Send Confirmation Email
 
 ###### 📚 API Documentation (Current Version)
 
-Authentication (User)
+# Authentication (User)
 | Method | Endpoint                                   | Description                | Auth |
 | ------ | ------------------------------------------ | -------------------------- | ---- |
 | POST   | `/api/v1/auth/register`                    | Register a new organizer   | ❌    |
@@ -244,6 +244,29 @@ Authentication (User)
 | POST   | `/api/v1/auth/verify-email` *(planned)*    | Verify email address       | ❌    |
 | POST   | `/api/v1/auth/forgot-password` *(planned)* | Request password reset     | ❌    |
 | POST   | `/api/v1/auth/reset-password` *(planned)*  | Reset password             | ❌    |
+
+
+# Organizer Payment Setup (MVP)
+
+| Method | Endpoint                                  | Purpose                     |
+| ------ | ----------------------------------------- | --------------------------- |
+| GET    | `/api/v1/payment-setup/banks`             | Get Nigerian banks          |
+| POST   | `/api/v1/payment-setup/verify-account`    | Verify account number       |
+| POST   | `/api/v1/payment-setup/create-subaccount` | Create Paystack subaccount  |
+| GET    | `/api/v1/payment-setup/me`                | Get organizer payment setup |
+
+
+
+
+# Organizer Profile
+| Method | Endpoint                 | Purpose                 |
+| ------ | ------------------------ | ----------------------- |
+| POST   | `/api/v1/upload/profile` | Upload profile picture  |
+| PUT    | `/api/v1/upload/profile` | Replace profile picture |
+| DELETE | `/api/v1/upload/profile` | Remove profile picture  |
+
+
+
 
 
 # 📂 Categories
@@ -267,7 +290,7 @@ Public Endpoints
 | GET    | `/api/v1/events/:id` | Get event details           | ❌    |
 
 
-Organizer Endpoints
+# Organizer Endpoints
 
 | Method | Endpoint                       | Description             | Auth        |
 | ------ | ------------------------------ | ----------------------- | ----------- |
@@ -277,6 +300,17 @@ Organizer Endpoints
 | DELETE | `/api/v1/events/:id`           | Delete event            | ✅ Organizer |
 | PATCH  | `/api/v1/events/:id/publish`   | Publish event           | ✅ Organizer |
 | PATCH  | `/api/v1/events/:id/unpublish` | Unpublish event         | ✅ Organizer |
+
+
+
+
+
+# Event Banner
+| Method | Endpoint                               | Purpose              |
+| ------ | -------------------------------------- | -------------------- |
+| POST   | `/api/v1/upload/event-banner/:eventId` | Upload event banner  |
+| PUT    | `/api/v1/upload/event-banner/:eventId` | Replace event banner |
+| DELETE | `/api/v1/upload/event-banner/:eventId` | Remove event banner  |
 
 
 # 👨‍💼 Admin (Planned)
@@ -309,7 +343,7 @@ Organizer
 | PATCH  | `/api/v1/tickets/:id/activate`   | Activate ticket    |
 | PATCH  | `/api/v1/tickets/:id/deactivate` | Deactivate ticket  |
 
-Register for Event
+# Register for Event
 
 | Method | Endpoint                             | Purpose                      |
 | ------ | ------------------------------------ | ---------------------------- |
@@ -320,7 +354,7 @@ Register for Event
 
 
 
-#
+# UsernPayment Setup
 
 | Step               | Method | Endpoint                                      | Body Required    |
 | ------------------ | ------ | --------------------------------------------- | ---------------- |
@@ -331,7 +365,7 @@ Register for Event
 | Check-in           | POST   | `/api/v1/check-in`                            | ✅                |
 
 
-#Admin Management APIs
+# Admin Management APIs
 
 | Method | Endpoint                          | Who Can Use |
 | ------ | --------------------------------- | ----------- |
@@ -342,12 +376,50 @@ Register for Event
 | DELETE | `/api/v1/admin/admins/:id`        | Super Admin |
 
 
+# Check in
+
+| Method | Endpoint                            |
+| ------ | ----------------------------------- |
+| POST   | `/api/v1/check-in/scan`             |
+| GET    | `/api/v1/check-in/history/:eventId` |
+
+
+# Organizer Dashboard
+
+GET /api/v1/dashboard/overview
+GET /api/v1/dashboard/revenue
+GET /api/v1/dashboard/events
+GET /api/v1/dashboard/registrations
+
+Statistics:
+
+Total Events
+Tickets Sold
+Revenue
+Upcoming Events
+Check-ins
+Pending Registrations
+
+# Admin Dashboard
+
+GET /api/v1/admin/dashboard
+GET /api/v1/admin/analytics
+
+Statistics:
+
+Organizers
+Events
+Registrations
+Revenue
+Platform Commission
+
+# Email Campaign
+
+POST /api/v1/events/:id/send-email
 
 
 
-
-
-seedAdmin
+# seedAdmin
 
 {
     "email":"admin@example.com",

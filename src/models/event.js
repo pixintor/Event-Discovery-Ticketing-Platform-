@@ -61,6 +61,11 @@ const Event = sequelize.define(
       allowNull: true,
     },
 
+    bannerPublicId: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,

@@ -34,9 +34,6 @@ await User.create({
   emailVerified: true,
 });
 
-    console.log("Admin created successfully.");
-
-    process.exit();
   } catch (error) {
     console.error(error);
     process.exit(1);
